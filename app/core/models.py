@@ -1,5 +1,5 @@
 """
-Database models
+Database models.
 """
 import uuid
 import os
@@ -15,8 +15,8 @@ from django.contrib.auth.models import (
 
 def recipe_image_file_path(instance, filename):
     """Generate file path for new recipe image."""
-    ext = os.path.splittext(filename)[1]
-    filename = f'{uuid.uuid64}{ext}'
+    ext = os.path.splitext(filename)[1]
+    filename = f'{uuid.uuid4()}{ext}'
 
     return os.path.join('uploads', 'recipe', filename)
 
@@ -39,7 +39,7 @@ class UserManager(BaseUserManager):
         user = self.create_user(email, password)
         user.is_staff = True
         user.is_superuser = True
-        user.save(using=self.db)
+        user.save(using=self._db)
 
         return user
 
@@ -75,7 +75,7 @@ class Recipe(models.Model):
 
 
 class Tag(models.Model):
-    """Tag for filtering recipes"""
+    """Tag for filtering recipes."""
     name = models.CharField(max_length=255)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
