@@ -9,9 +9,10 @@ from core.models import (
     Ingredient,
 )
 
+
 class IngredientSerializer(serializers.ModelSerializer):
     """Serializer for ingredients."""
-    
+
     class Meta:
         model = Ingredient
         fields = ['id', 'name']
@@ -29,17 +30,18 @@ class TagSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     """Serializer for recipe"""
     tags = TagSerializer(many=True, required=False)
-    ingredients = IngredientSerializer(many=True, required=False)    
+    ingredients = IngredientSerializer(many=True, required=False)
 
     class Meta:
         model = Recipe
-        fields = ['id',
-                'title',
-                'time_minutes',
-                'price',
-                'link',
-                'tags',
-                'ingredients',
+        fields = [
+                    'id',
+                    'title',
+                    'time_minutes',
+                    'price',
+                    'link',
+                    'tags',
+                    'ingredients',
                 ]
         read_only_fields = ['id']
 
@@ -64,8 +66,8 @@ class RecipeSerializer(serializers.ModelSerializer):
             recipe.ingredients.add(ingredient_obj)
 
     def create(self, validated_data):
-        tags = validated_data.pop('tags',[])
-        ingredients = validated_data.pop('ingredients',[])
+        tags = validated_data.pop('tags', [])
+        ingredients = validated_data.pop('ingredients', [])
         recipe = Recipe.objects.create(**validated_data)
         self._get_or_create_tags(tags, recipe)
         self._get_or_create_ingredients(ingredients, recipe)
@@ -85,9 +87,10 @@ class RecipeSerializer(serializers.ModelSerializer):
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
+
         instance.save()
         return instance
+
 
 class RecipeDetailSerializer(RecipeSerializer):
     """Serializer for recipe detail view"""

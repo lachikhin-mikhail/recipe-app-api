@@ -2,7 +2,7 @@
 Tests for the tags API.
 """
 from decimal import Decimal
- 
+
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.test import TestCase
@@ -79,7 +79,7 @@ class PrivateTagsAPITests(TestCase):
     def test_update_tag(self):
         """Test updating tag."""
         tag = Tag.objects.create(user=self.user, name='After dinner')
-        
+
         payload = {'name': 'Dessert'}
         url = detail_url(tag.id)
         res = self.client.patch(url, payload)
@@ -135,7 +135,7 @@ class PrivateTagsAPITests(TestCase):
         )
         recipe1.tags.add(tag)
         recipe2.tags.add(tag)
-        
+
         res = self.client.get(TAGS_URL, {'assigned_only': 1})
 
         self.assertEqual(len(res.data), 1)

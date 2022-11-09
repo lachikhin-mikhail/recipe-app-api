@@ -12,7 +12,7 @@ from rest_framework.test import APIClient
 
 from core.models import (
     Ingredient,
-    Recipe, 
+    Recipe,
 )
 
 from recipe.serializers import IngredientSerializer
@@ -24,6 +24,7 @@ INGREDIENTS_URL = reverse('recipe:ingredient-list')
 def detail_url(ingredient_id):
     """Create and return an ingredient detail URL."""
     return reverse('recipe:ingredient-detail', args=[ingredient_id])
+
 
 def create_user(email='user@example.com', password='testpass123'):
     """Create and return user."""
@@ -45,7 +46,7 @@ class PublicIngredientsAPITests(TestCase):
 
 class PrivateIngredientsAPITests(TestCase):
     """Test authenticated API requests."""
-    
+
     def setUp(self):
         self.user = create_user()
         self.client = APIClient()
@@ -75,7 +76,7 @@ class PrivateIngredientsAPITests(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['name'], ingredient.name)
         self.assertEqual(res.data[0]['id'], ingredient.id)
-        
+
     def test_update_ingredient(self):
         """Test updating an ingredient."""
         ingredient = Ingredient.objects.create(user=self.user, name="Cilantro")
@@ -111,7 +112,7 @@ class PrivateIngredientsAPITests(TestCase):
         )
         recipe.ingredients.add(in1)
 
-        res = self.client.get(INGREDIENTS_URL, {'assigned_only':1})
+        res = self.client.get(INGREDIENTS_URL, {'assigned_only': 1})
 
         s1 = IngredientSerializer(in1)
         s2 = IngredientSerializer(in2)

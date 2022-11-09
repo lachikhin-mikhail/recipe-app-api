@@ -27,13 +27,16 @@ from recipe.serializers import (
 
 RECIPES_URL = reverse('recipe:recipe-list')
 
+
 def detail_url(recipe_id):
     """Create and return a recipe detail URL."""
     return reverse('recipe:recipe-detail', args=[recipe_id])
 
+
 def image_upload_url(recipe_id):
     """Create and return an image upload URL."""
     return reverse('recipe:recipe-upload-image', args=[recipe_id])
+
 
 def create_recipe(user, **params):
     """Create and return a sample recipe"""
@@ -48,6 +51,7 @@ def create_recipe(user, **params):
 
     recipe = Recipe.objects.create(user=user, **default)
     return recipe
+
 
 def create_user(**params):
     """Create and return a new user."""
@@ -134,10 +138,10 @@ class PrivateRecipeAPITest(TestCase):
         recipe = create_recipe(
             user=self.user,
             title='Sample recipe title',
-            link = original_link,
+            link=original_link,
         )
 
-        payload = {'title':'New recipe title'}
+        payload = {'title': 'New recipe title'}
         url = detail_url(recipe.id)
         res = self.client.patch(url, payload)
 
@@ -196,7 +200,10 @@ class PrivateRecipeAPITest(TestCase):
 
     def test_recipe_other_users_recipe_error(self):
         """Test trying to delete another users recipe gives error."""
-        new_user = create_user(email='user2@example.com', password="password123")
+        new_user = create_user(
+                                email='user2@example.com',
+                                password="password123"
+                                )
         recipe = create_recipe(user=new_user)
 
         url = detail_url(recipe.id)
@@ -284,7 +291,7 @@ class PrivateRecipeAPITest(TestCase):
         recipe = create_recipe(user=self.user)
         recipe.tags.add(tag)
 
-        payload = {'tags':[]}
+        payload = {'tags': []}
         url = detail_url(recipe.id)
         res = self.client.patch(url, payload, format='json')
 
@@ -297,7 +304,7 @@ class PrivateRecipeAPITest(TestCase):
             'title': 'Cauliflower Tacos',
             'time_minutes': 60,
             'price': Decimal('4.30'),
-            'ingredients': [{'name':'Cauliflower'},{'name': 'Salt'}],
+            'ingredients': [{'name': 'Cauliflower'}, {'name': 'Salt'}],
         }
         res = self.client.post(RECIPES_URL, payload, format='json')
 
@@ -416,10 +423,10 @@ class PrivateRecipeAPITest(TestCase):
         self.assertIn(s2.data, res.data)
         self.assertNotIn(s3.data, res.data)
 
-        
+
 class ImageUploadTests(TestCase):
     """Tests for the image upload API."""
-    
+
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(

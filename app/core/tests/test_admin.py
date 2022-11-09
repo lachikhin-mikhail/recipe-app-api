@@ -1,7 +1,6 @@
 """
 Test for the Django admin modifications.
 """
-from re import L
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
